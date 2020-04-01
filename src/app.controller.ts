@@ -2,16 +2,17 @@ import { Controller, Get, Post, Body, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
 
+
 export interface IDetialsDTO {
-  name: string; 
-  phone: string; 
-  email: string; 
+  name: string;
+  phone: string;
+  email: string;
   company: string;
 }
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
 
   @Get()
   getHello(): string {
@@ -19,7 +20,7 @@ export class AppController {
   }
 
   @Post()
-  sendMail(){
+  sendMail() {
     console.log("Send mail Function");
     return this.appService.sendMail();
   }
@@ -29,10 +30,10 @@ export class AppController {
     return await this.appService.sendRegistrationMessage(details).then(data => {
       res.send(data);
     })
-    .catch(err => {
-      res.send(err);
-    });
-    
+      .catch(err => {
+        res.send(err);
+      });
+
   }
 
   @Post('quotation-approved')
@@ -40,8 +41,16 @@ export class AppController {
     return await this.appService.sendQuotationApprovedMessage(details).then(data => {
       res.send(data);
     })
-    .catch(err => {
-      res.send(err);
-    });
+      .catch(err => {
+        res.send(err);
+      });
+  }
+
+  @Post('SMS')
+  sendSMS(){
+  console.log("Send SMS Function");
+  return this.appService.sendSMS();
 }
+
 }
+

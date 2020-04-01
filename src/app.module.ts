@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 
+
 @Module({
   imports: [MailerModule.forRoot({
     transport: {
@@ -14,7 +15,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
         secure: false, // true for 465, false for other ports
         auth: {
           user: 'flosure-insurance@outlook.com', // generated ethereal user
-          pass: '12345678qwerty' // generated ethereal password
+          pass: 'zxcvbnm,.' // generated ethereal password
         },
       },
     defaults: {

@@ -1,5 +1,6 @@
 import { IDetialsDTO } from "src/app.controller";
 
+
 export function RegistrationEmail(detail: IDetialsDTO): string {
     return `<!doctype html>
     <html>

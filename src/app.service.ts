@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IDetialsDTO } from './app.controller';
-import { RegistrationEmail, QoutationApprovedEmail } from './utils/functionservice';
+import { RegistrationEmail, QoutationApprovedEmail } from './utils/emails';
+
 
 @Injectable()
 export class AppService {
@@ -12,7 +13,7 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-
+//specific for succesfull registration
   async sendRegistrationMessage(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
       to: detail.email,
@@ -21,7 +22,7 @@ export class AppService {
       html: RegistrationEmail(detail),
     })
   }
-
+//specific for approved quations 
   async sendQuotationApprovedMessage(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
       to: detail.email,
@@ -31,7 +32,7 @@ export class AppService {
     })
   }
 
-
+//This is the defualt function that sends email alerts
   sendMail() {
     console.log('SEND EMAIL FUNCTION IN SERVICE');
 
@@ -437,4 +438,29 @@ export class AppService {
         console.log(err);
       })
   }
+
+  //this method/function works with the API to send sms's
+  sendSMS() {
+    const accountSid: string = 'AC638717c039a09da5466ffe4cbd8372dd';
+    const authToken: string = 'bfbac1710e07178e0b6013bc0f932585';
+
+    const client = require('twilio')(accountSid, authToken);
+
+    client.messages
+      .create({
+        body: 'Hello everyone, this is a test of the sms notification system',
+        from: '+12029521471',
+        to: '+260977909657'
+
+      })
+
+      .then((res) => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
 }
+
