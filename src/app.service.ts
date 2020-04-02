@@ -19,7 +19,7 @@ export class AppService {
       to: detail.email,
       from: 'flosure-insurance@outlook.com',
       subject: `Welcome to ${detail.company}`,
-      html: RegistrationEmail(detail),
+      html: RegistrationEmail(detail),//function found in email.ts
     })
   }
 //specific for approved quations 
@@ -28,7 +28,7 @@ export class AppService {
       to: detail.email,
       from: 'flosure-insurance@outlook.com',
       subject: `Welcome to ${detail.company}`,
-      html: QoutationApprovedEmail(detail),
+      html: QoutationApprovedEmail(detail), //function found in email.ts
     })
   }
 
