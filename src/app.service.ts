@@ -442,7 +442,7 @@ export class AppService {
   //this method/function works with the API to send sms's
   sendSMS() {
     const accountSid: string = 'AC638717c039a09da5466ffe4cbd8372dd';
-    const authToken: string = 'bfbac1710e07178e0b6013bc0f932585';
+    const authToken: string = 'c515c5bb523d6a074c16e54d2f3b438d';
 
     const client = require('twilio')(accountSid, authToken);
 
