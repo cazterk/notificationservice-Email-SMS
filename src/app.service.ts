@@ -22,9 +22,18 @@ export class AppService {
       html: RegistrationEmail(detail),//function found in email.ts
     })
   }
+
 //specific for approved quations 
   async sendQuotationApprovedMessage(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
+      attachments: [
+        {
+          filename: detail.fileName,
+          cid: '484948',
+          contentType: 'application/pdf',
+          path: detail.filePath
+        }
+      ],
       to: detail.email,
       from: 'flosure-insurance@outlook.com',
       subject: `Welcome to ${detail.company}`,

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
 import { ApiProperty } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 
 export class IDetialsDTO {
@@ -16,6 +17,12 @@ export class IDetialsDTO {
 
   @ApiProperty()
   company: string;
+
+  @ApiProperty()
+  filePath: string;
+
+  @ApiProperty()
+  fileName: string;
 }
 
 @Controller()
@@ -45,7 +52,9 @@ export class AppController {
   }
 
   @Post('quotation-approved')
-  async QoutationApprovedEmail(@Body() details: IDetialsDTO, @Res() res: Response) {
+  @UseInterceptors(FileInterceptor('file'))
+  async QoutationApprovedEmail(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
+    console.log(file);
     return await this.appService.sendQuotationApprovedMessage(details).then(data => {
       res.send(data);
     })
@@ -54,7 +63,7 @@ export class AppController {
       });
   }
 
-  @Post('SMS')
+  @Post('sms')
   sendSMS(){
   console.log("Send SMS Function");
   return this.appService.sendSMS();
