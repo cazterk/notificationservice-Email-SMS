@@ -1,12 +1,20 @@
 import { Controller, Get, Post, Body, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
+import { ApiProperty } from '@nestjs/swagger';
 
 
-export interface IDetialsDTO {
+export class IDetialsDTO {
+  @ApiProperty()
   name: string;
+
+  @ApiProperty()
   phone: string;
+
+  @ApiProperty()
   email: string;
+
+  @ApiProperty()
   company: string;
 }
 
