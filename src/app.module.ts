@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MailerModule } from '@nestjs-modules/mailer';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 
 @Module({
@@ -14,8 +16,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
         },
         secure: false, // true for 465, false for other ports
         auth: {
-          user: 'flosure-insurance@outlook.com', // generated ethereal user
-          pass: 'zxcvbnm,.' // generated ethereal password
+          user: process.env.USER, // generated ethereal user
+          pass: process.env.PASS // generated ethereal password
         },
       },
     defaults: {

@@ -23,6 +23,10 @@ export class IDetialsDTO {
 
   @ApiProperty()
   fileName: string;
+
+  @ApiProperty()
+  subject: string;
+
 }
 
 @Controller()
@@ -40,9 +44,11 @@ export class AppController {
     return this.appService.sendMail();
   }
 
+
+//post registration email
   @Post('registration')
-  async sendRegistrationMessage(@Body() details: IDetialsDTO, @Res() res: Response) {
-    return await this.appService.sendRegistrationMessage(details).then(data => {
+  async sendRegistrationEmail(@Body() details: IDetialsDTO, @Res() res: Response) {
+    return await this.appService.sendRegistrationEmail(details).then(data => {
       res.send(data);
     })
       .catch(err => {
@@ -51,11 +57,13 @@ export class AppController {
 
   }
 
+
+  //post approved email
   @Post('quotation-approved')
   @UseInterceptors(FileInterceptor('file'))
-  async QoutationApprovedEmail(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
+  async sendApprovedQuotation(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
     console.log(file);
-    return await this.appService.sendQuotationApprovedMessage(details).then(data => {
+    return await this.appService.sendApprovedQuotation(details).then(data => {
       res.send(data);
     })
       .catch(err => {
@@ -63,11 +71,55 @@ export class AppController {
       });
   }
 
+
+  //post draft email
+  @Post('quotation-drafted')
+  @UseInterceptors(FileInterceptor('file'))
+  async sendQuotationDraft(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
+    console.log(file);
+    return await this.appService.sendQuotationDraft(details).then(data => {
+      res.send(data);
+    })
+      .catch(err => {
+        res.send(err);
+      });
+  }
+
+
+  //post policy email
+  @Post('policy')
+  @UseInterceptors(FileInterceptor('file'))
+  async sendPolicyEmail(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
+    console.log(file);
+    return await this.appService.sendPolicyEmail(details).then(data => {
+      res.send(data);
+    })
+      .catch(err => {
+        res.send(err);
+      });
+  }
+
+
+ //post receipt email
+  @Post('receipt')
+  @UseInterceptors(FileInterceptor('file'))
+  async sendReceipts(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
+    console.log(file);
+    return await this.appService.sendReceipts(details).then(data => {
+      res.send(data);
+    })
+      .catch(err => {
+        res.send(err);
+      });
+  }
+
+
+  // post defualt email 
   @Post('sms')
-  sendSMS(){
-  console.log("Send SMS Function");
-  return this.appService.sendSMS();
-}
+  sendSMS() {
+    console.log("Send SMS Function");
+    return this.appService.sendSMS();
+  }
 
 }
 

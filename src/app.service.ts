@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IDetialsDTO } from './app.controller';
-import { RegistrationEmail, QoutationApprovedEmail } from './utils/emails';
+import { registrationEmail, qoutationApprovedEmail, recieptEmail, policyEmail } from './utils/emails';
+import * as dotenv from 'dotenv';
 
 
 @Injectable()
@@ -13,18 +14,37 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-//specific for succesfull registration
-  async sendRegistrationMessage(detail: IDetialsDTO): Promise<any> {
+  //specific for succesfull registration
+  async sendRegistrationEmail(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
       to: detail.email,
       from: 'flosure-insurance@outlook.com',
       subject: `Welcome to ${detail.company}`,
-      html: RegistrationEmail(detail),//function found in email.ts
+      html: registrationEmail(detail),//function found in email.ts
     })
   }
 
-//specific for approved quations 
-  async sendQuotationApprovedMessage(detail: IDetialsDTO): Promise<any> {
+  //specific for approved quotations 
+  async sendApprovedQuotation(detail: IDetialsDTO): Promise<any> {
+    return await this.mailerService.sendMail({
+      attachments: [
+        {
+          filename: detail.fileName,
+          cid: '484948',
+          contentType: 'application/pdf',
+          path: detail.filePath
+        }
+      ],
+      to: detail.email,
+      from: 'flosure-insurance@outlook.com',
+      subject: detail.subject,
+      html: qoutationApprovedEmail(detail), //function found in email.ts
+    })
+  }
+
+
+  //specific for reciepts
+  async sendReceipts(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
       attachments: [
         {
@@ -37,11 +57,49 @@ export class AppService {
       to: detail.email,
       from: 'flosure-insurance@outlook.com',
       subject: `Welcome to ${detail.company}`,
-      html: QoutationApprovedEmail(detail), //function found in email.ts
+      html: recieptEmail(detail), //function found in email.ts
     })
   }
 
-//This is the defualt function that sends email alerts
+  //specific for draft quotations
+  async sendQuotationDraft(detail: IDetialsDTO): Promise<any> {
+    return await this.mailerService.sendMail({
+      attachments: [
+        {
+          filename: detail.fileName,
+          cid: '484948',
+          contentType: 'application/pdf',
+          path: detail.filePath
+        }
+      ],
+      to: detail.email,
+      from: 'flosure-insurance@outlook.com',
+      subject: detail.subject,
+      html: qoutationApprovedEmail(detail), //function found in email.ts
+    })
+  }
+
+
+ //specific for draft quotations
+ async sendPolicyEmail(detail: IDetialsDTO): Promise<any> {
+  return await this.mailerService.sendMail({
+    attachments: [
+      {
+        filename: detail.fileName,
+        cid: '484948',
+        contentType: 'application/pdf',
+        path: detail.filePath
+      }
+    ],
+    to: detail.email,
+    from: 'flosure-insurance@outlook.com',
+    subject: `Welcome to ${detail.company}`,
+    html: policyEmail(detail), //function found in email.ts
+  })
+}
+
+
+  //This is the defualt function that sends email alerts
   sendMail() {
     console.log('SEND EMAIL FUNCTION IN SERVICE');
 
@@ -439,19 +497,14 @@ export class AppService {
           </body>
         </html>`, // HTML body content
       })
-
-      .then((res) => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err);
-      })
   }
+
 
   //this method/function works with the API to send sms's
   sendSMS() {
-    const accountSid: string = 'AC638717c039a09da5466ffe4cbd8372dd';
-    const authToken: string = 'c515c5bb523d6a074c16e54d2f3b438d';
+    dotenv.config();
+    const accountSid: string = process.env.ACCOUNTSID;
+    const authToken: string = process.env.AUTHTOKEN;
 
     const client = require('twilio')(accountSid, authToken);
 
@@ -461,13 +514,6 @@ export class AppService {
         from: '+12029521471',
         to: '+260977909657'
 
-      })
-
-      .then((res) => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err);
       })
   }
 
