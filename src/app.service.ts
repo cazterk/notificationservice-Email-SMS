@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, All } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IDetialsDTO } from './app.controller';
-import { registrationEmail, qoutationApprovedEmail, recieptEmail, policyEmail } from './utils/emails';
+import { registrationEmail, qoutationApprovedEmail, recieptEmail, policyEmail,paymentPlan } from './utils/emails';
 import * as dotenv from 'dotenv';
+import { application } from 'express';
+import { pbkdf2 } from 'crypto';
 
 
 @Injectable()
@@ -11,9 +13,12 @@ export class AppService {
   constructor(
     private readonly mailerService: MailerService
   ) { }
+
   getHello(): string {
     return 'Hello World!';
   }
+
+
   //specific for succesfull registration
   async sendRegistrationEmail(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
@@ -24,6 +29,7 @@ export class AppService {
     })
   }
 
+
   //specific for approved quotations 
   async sendApprovedQuotation(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
@@ -32,12 +38,12 @@ export class AppService {
           filename: detail.fileName,
           cid: '484948',
           contentType: 'application/pdf',
-          path: detail.filePath
+          path: detail.filePath[0]
         }
       ],
       to: detail.email,
-      from: 'flosure-insurance@outlook.com',
-      subject: detail.subject,
+      from: 'flosure-insurance2@outlook.com',
+      subject: 'Quotation Approved',
       html: qoutationApprovedEmail(detail), //function found in email.ts
     })
   }
@@ -51,15 +57,16 @@ export class AppService {
           filename: detail.fileName,
           cid: '484948',
           contentType: 'application/pdf',
-          path: detail.filePath
+          path: detail.filePath[0]
         }
       ],
       to: detail.email,
-      from: 'flosure-insurance@outlook.com',
-      subject: `Welcome to ${detail.company}`,
+      from: 'flosure-insurance2@outlook.com',
+      subject: `Reciept`,
       html: recieptEmail(detail), //function found in email.ts
     })
   }
+
 
   //specific for draft quotations
   async sendQuotationDraft(detail: IDetialsDTO): Promise<any> {
@@ -69,35 +76,64 @@ export class AppService {
           filename: detail.fileName,
           cid: '484948',
           contentType: 'application/pdf',
-          path: detail.filePath
+          path: detail.filePath[0]
         }
       ],
       to: detail.email,
       from: 'flosure-insurance@outlook.com',
-      subject: detail.subject,
+      subject: 'Draft',
       html: qoutationApprovedEmail(detail), //function found in email.ts
     })
   }
 
 
- //specific for draft quotations
- async sendPolicyEmail(detail: IDetialsDTO): Promise<any> {
-  return await this.mailerService.sendMail({
-    attachments: [
-      {
-        filename: detail.fileName,
-        cid: '484948',
-        contentType: 'application/pdf',
-        path: detail.filePath
-      }
-    ],
-    to: detail.email,
-    from: 'flosure-insurance@outlook.com',
-    subject: `Welcome to ${detail.company}`,
-    html: policyEmail(detail), //function found in email.ts
-  })
-}
+  //specific for policies
+  async sendPolicyEmail(detail: IDetialsDTO): Promise<any> {
+    return await this.mailerService.sendMail({
+     attachments: [
+        {
+             filename: detail.fileName,
+             cid: '484948',
+             contentType: 'application/pdf',
+             path: detail.filePath[0]
+        },
+        {
+          filename: detail.fileName,
+          cid: '484948',
+          contentType: 'application/pdf',
+          path: detail.filePath[1]
+        },
+        {
+          filename: detail.fileName,
+          cid: '484948',
+          contentType: 'application/pdf',
+          path: detail.filePath[2]
+        }
+   ],
+      to: detail.email,
+      from: 'flosure-insurance2@outlook.com',
+      subject: `Policies`,
+      html: policyEmail(detail), //function found in email.ts
+    })
+  }
 
+   //specific for draft quo
+   async sendPaymentPlan(detail: IDetialsDTO): Promise<any> {
+    return await this.mailerService.sendMail({
+      attachments: [
+        {
+          filename: detail.fileName,
+          cid: '484948',
+          contentType: 'application/pdf',
+          path: detail.filePath[0]
+        }
+      ],
+      to: detail.email,
+      from: 'flosure-insurance2@outlook.com',
+      subject: `Policies`,
+      html: paymentPlan(detail), //function found in email.ts
+    })
+  }
 
   //This is the defualt function that sends email alerts
   sendMail() {
@@ -107,7 +143,7 @@ export class AppService {
       .mailerService
       .sendMail({
         to: 'jsilwembe@gmail.com', // list of receivers
-        from: 'flosure-insurance@outlook.com', // sender address
+        from: 'flosure-insurance2@outlook.com', // sender address
         subject: 'Testing Nest MailerModule ✔', // Subject line
         text: 'welcome', // plaintext body
         html: `<!doctype html>

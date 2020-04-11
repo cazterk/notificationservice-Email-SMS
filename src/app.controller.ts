@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Res, UseInterceptors, UploadedFile } from 
 import { AppService } from './app.service';
 import { Response } from 'express';
 import { ApiProperty } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 
 
 export class IDetialsDTO {
@@ -19,13 +19,15 @@ export class IDetialsDTO {
   company: string;
 
   @ApiProperty()
-  filePath: string;
+  filePath: string[];
 
   @ApiProperty()
   fileName: string;
 
   @ApiProperty()
   subject: string;
+
+
 
 }
 
@@ -45,7 +47,7 @@ export class AppController {
   }
 
 
-//post registration email
+  //post registration email
   @Post('registration')
   async sendRegistrationEmail(@Body() details: IDetialsDTO, @Res() res: Response) {
     return await this.appService.sendRegistrationEmail(details).then(data => {
@@ -55,70 +57,89 @@ export class AppController {
         res.send(err);
       });
 
+
   }
 
 
   //post approved email
-  @Post('quotation-approved')
-  @UseInterceptors(FileInterceptor('file'))
-  async sendApprovedQuotation(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
-    console.log(file);
+  @Post('quotationapproved')
+
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 3 },]))
+  async sendApprovedQuotation(@Body() details: IDetialsDTO, @UploadedFile() files, @Res() res: Response) {
+    console.log(files);
     return await this.appService.sendApprovedQuotation(details).then(data => {
       res.send(data);
     })
       .catch(err => {
         res.send(err);
       });
+
   }
 
 
   //post draft email
-  @Post('quotation-drafted')
-  @UseInterceptors(FileInterceptor('file'))
-  async sendQuotationDraft(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
-    console.log(file);
+  @Post('draftedquotation')
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 2 },]))
+  async sendQuotationDraft(@Body() details: IDetialsDTO, @UploadedFile() files, @Res() res: Response) {
+    console.log(files);
     return await this.appService.sendQuotationDraft(details).then(data => {
       res.send(data);
     })
       .catch(err => {
         res.send(err);
       });
+
   }
 
 
   //post policy email
   @Post('policy')
-  @UseInterceptors(FileInterceptor('file'))
-  async sendPolicyEmail(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
-    console.log(file);
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 20 },]))
+  async sendPolicyEmail(@Body() details: IDetialsDTO, @UploadedFile() files, @Res() res: Response) {
+    console.log(files);
     return await this.appService.sendPolicyEmail(details).then(data => {
       res.send(data);
     })
       .catch(err => {
         res.send(err);
       });
+
   }
 
 
- //post receipt email
+  //post receipt email
   @Post('receipt')
-  @UseInterceptors(FileInterceptor('file'))
-  async sendReceipts(@Body() details: IDetialsDTO, @UploadedFile() file, @Res() res: Response) {
-    console.log(file);
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 3 },]))
+  async sendReceipts(@Body() details: IDetialsDTO, @UploadedFile() files, @Res() res: Response) {
+    console.log(files);
     return await this.appService.sendReceipts(details).then(data => {
       res.send(data);
     })
       .catch(err => {
         res.send(err);
       });
+
+  }
+  @Post('paymenetplan')
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 3 },]))
+  async sendPaymentPlan(@Body() details: IDetialsDTO, @UploadedFile() files, @Res() res: Response) {
+    console.log(files);
+    return await this.appService.sendPaymentPlan(details).then(data => {
+      res.send(data);
+    })
+      .catch(err => {
+        res.send(err);
+      });
+
   }
 
 
-  // post defualt email 
+  // post sms
   @Post('sms')
   sendSMS() {
     console.log("Send SMS Function");
     return this.appService.sendSMS();
+
   }
 
 }
