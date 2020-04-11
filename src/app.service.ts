@@ -1,7 +1,7 @@
 import { Injectable, All } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IDetialsDTO } from './app.controller';
-import { registrationEmail, qoutationApprovedEmail, recieptEmail, policyEmail,paymentPlan } from './utils/emails';
+import { registrationEmail, qoutationApprovedEmail, recieptEmail, policyEmail,paymentPlan, draftQuotationtEmail } from './utils/emails';
 import * as dotenv from 'dotenv';
 import { application } from 'express';
 import { pbkdf2 } from 'crypto';
@@ -23,7 +23,7 @@ export class AppService {
   async sendRegistrationEmail(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
       to: detail.email,
-      from: 'flosure-insurance@outlook.com',
+      from: 'flosure-insurance2@outlook.com',
       subject: `Welcome to ${detail.company}`,
       html: registrationEmail(detail),//function found in email.ts
     })
@@ -80,9 +80,9 @@ export class AppService {
         }
       ],
       to: detail.email,
-      from: 'flosure-insurance@outlook.com',
+      from: 'flosure-insurance2@outlook.com',
       subject: 'Draft',
-      html: qoutationApprovedEmail(detail), //function found in email.ts
+      html: draftQuotationtEmail(detail), //function found in email.ts
     })
   }
 
@@ -130,7 +130,7 @@ export class AppService {
       ],
       to: detail.email,
       from: 'flosure-insurance2@outlook.com',
-      subject: `Policies`,
+      subject: `Payment Plan`,
       html: paymentPlan(detail), //function found in email.ts
     })
   }
