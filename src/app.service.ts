@@ -1,10 +1,10 @@
 import { Injectable, All } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IDetialsDTO } from './app.controller';
-import { registrationEmail, qoutationApprovedEmail, recieptEmail, policyEmail,paymentPlan, draftQuotationtEmail } from './utils/emails';
+import { registrationEmail, qoutationApprovedEmail, recieptEmail, policyEmail, paymentPlan, draftQuotationtEmail } from './utils/emails';
 import * as dotenv from 'dotenv';
-import { application } from 'express';
-import { pbkdf2 } from 'crypto';
+
+
 
 
 @Injectable()
@@ -89,27 +89,18 @@ export class AppService {
 
   //specific for policies
   async sendPolicyEmail(detail: IDetialsDTO): Promise<any> {
+    let files = detail.filePath.map(f => {
+      return {
+        filename: detail.fileName,
+        cid: '484948',
+        contentType: 'application/pdf',
+        path: f
+
+      }
+
+    })
     return await this.mailerService.sendMail({
-     attachments: [
-        {
-             filename: detail.fileName,
-             cid: '484948',
-             contentType: 'application/pdf',
-             path: detail.filePath[0]
-        },
-        {
-          filename: detail.fileName,
-          cid: '484948',
-          contentType: 'application/pdf',
-          path: detail.filePath[1]
-        },
-        {
-          filename: detail.fileName,
-          cid: '484948',
-          contentType: 'application/pdf',
-          path: detail.filePath[2]
-        }
-   ],
+      attachments: files,
       to: detail.email,
       from: 'flosure-insurance2@outlook.com',
       subject: `Policies`,
@@ -117,8 +108,8 @@ export class AppService {
     })
   }
 
-   //specific for draft quo
-   async sendPaymentPlan(detail: IDetialsDTO): Promise<any> {
+  //specific for draft quo
+  async sendPaymentPlan(detail: IDetialsDTO): Promise<any> {
     return await this.mailerService.sendMail({
       attachments: [
         {

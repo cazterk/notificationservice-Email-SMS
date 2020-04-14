@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Response } from 'express';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, } from '@nestjs/swagger';
 import { FileInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 
 
