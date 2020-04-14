@@ -79,7 +79,7 @@ export class AppController {
 
   //post draft email
   @Post('draftedquotation')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 2 },]))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 3 },]))
   async sendQuotationDraft(@Body() details: IDetialsDTO, @UploadedFile() files, @Res() res: Response) {
     console.log(files);
     return await this.appService.sendQuotationDraft(details).then(data => {
