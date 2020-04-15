@@ -32,15 +32,18 @@ export class AppService {
 
   //specific for approved quotations 
   async sendApprovedQuotation(detail: IDetialsDTO): Promise<any> {
+    let files = detail.filePath.map(f => {
+      return {
+        filename: detail.fileName,
+        cid: '484948',
+        contentType: 'application/pdf',
+        path: f
+
+      }
+
+    })
     return await this.mailerService.sendMail({
-      attachments: [
-        {
-          filename: detail.fileName,
-          cid: '484948',
-          contentType: 'application/pdf',
-          path: detail.filePath[0]
-        }
-      ],
+      attachments: files,
       to: detail.email,
       from: 'flosure-insurance2@outlook.com',
       subject: 'Quotation Approved',
@@ -51,15 +54,18 @@ export class AppService {
 
   //specific for reciepts
   async sendReceipts(detail: IDetialsDTO): Promise<any> {
+    let files = detail.filePath.map(f => {
+      return {
+        filename: detail.fileName,
+        cid: '484948',
+        contentType: 'application/pdf',
+        path: f
+
+      }
+
+    })
     return await this.mailerService.sendMail({
-      attachments: [
-        {
-          filename: detail.fileName,
-          cid: '484948',
-          contentType: 'application/pdf',
-          path: detail.filePath[0]
-        }
-      ],
+      attachments: files,
       to: detail.email,
       from: 'flosure-insurance2@outlook.com',
       subject: `Reciept`,
@@ -70,15 +76,18 @@ export class AppService {
 
   //specific for draft quotations
   async sendQuotationDraft(detail: IDetialsDTO): Promise<any> {
+    let files = detail.filePath.map(f => {
+      return {
+        filename: detail.fileName,
+        cid: '484948',
+        contentType: 'application/pdf',
+        path: f
+
+      }
+
+    })
     return await this.mailerService.sendMail({
-      attachments: [
-        {
-          filename: detail.fileName,
-          cid: '484948',
-          contentType: 'application/pdf',
-          path: detail.filePath[0]
-        }
-      ],
+      attachments: files,
       to: detail.email,
       from: 'flosure-insurance2@outlook.com',
       subject: 'Draft',
@@ -110,15 +119,18 @@ export class AppService {
 
   //specific for draft quo
   async sendPaymentPlan(detail: IDetialsDTO): Promise<any> {
+    let files = detail.filePath.map(f => {
+      return {
+        filename: detail.fileName,
+        cid: '484948',
+        contentType: 'application/pdf',
+        path: f
+
+      }
+
+    })
     return await this.mailerService.sendMail({
-      attachments: [
-        {
-          filename: detail.fileName,
-          cid: '484948',
-          contentType: 'application/pdf',
-          path: detail.filePath[0]
-        }
-      ],
+      attachments: files,
       to: detail.email,
       from: 'flosure-insurance2@outlook.com',
       subject: `Payment Plan`,
@@ -528,7 +540,7 @@ export class AppService {
 
 
   //this method/function works with the API to send sms's
-  sendSMS() {
+  async sendSMS(detail: IDetialsDTO) {
     dotenv.config();
     const accountSid: string = process.env.ACCOUNTSID;
     const authToken: string = process.env.AUTHTOKEN;
@@ -539,10 +551,21 @@ export class AppService {
       .create({
         body: 'Hello everyone, this is a test of the sms notification system',
         from: '+12029521471',
-        to: '+260977909657'
+        to: detail.phone
 
       })
   }
 
-}
+  async multi(detail: IDetialsDTO): Promise<any> {
+    let files = detail.filePath.map(f => {
+      return {
+        filename: detail.fileName,
+        cid: '484948',
+        contentType: 'application/pdf',
+        path: f
 
+      }
+
+    })
+  }
+}

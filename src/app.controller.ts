@@ -136,9 +136,14 @@ export class AppController {
 
   // post sms
   @Post('sms')
-  sendSMS() {
+  async sendSMS(@Body() details: IDetialsDTO, @Res() res: Response) {
     console.log("Send SMS Function");
-    return this.appService.sendSMS();
+    return await this.appService.sendSMS(details).then(data => {
+      res.send(data);
+    })
+      .catch(err => {
+        res.send(err);
+      });
 
   }
 
