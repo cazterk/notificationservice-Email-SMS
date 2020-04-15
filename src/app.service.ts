@@ -540,14 +540,14 @@ export class AppService {
 
 
   //this method/function works with the API to send sms's
-  async sendSMS(detail: IDetialsDTO) {
+  async sendSMS(detail: IDetialsDTO): Promise<any> {
     dotenv.config();
     const accountSid: string = process.env.ACCOUNTSID;
     const authToken: string = process.env.AUTHTOKEN;
 
     const client = require('twilio')(accountSid, authToken);
 
-    client.messages
+    return await client.messages
       .create({
         body: 'Hello everyone, this is a test of the sms notification system',
         from: '+12029521471',
@@ -556,16 +556,16 @@ export class AppService {
       })
   }
 
-  async multi(detail: IDetialsDTO): Promise<any> {
-    let files = detail.filePath.map(f => {
-      return {
-        filename: detail.fileName,
-        cid: '484948',
-        contentType: 'application/pdf',
-        path: f
+  // async multi(detail: IDetialsDTO): Promise<any> {
+  //   let files = detail.filePath.map(f => {
+  //     return {
+  //       filename: detail.fileName,
+  //       cid: '484948',
+  //       contentType: 'application/pdf',
+  //       path: f
 
-      }
+  //     }
 
-    })
-  }
+  //   })
+  // }
 }
