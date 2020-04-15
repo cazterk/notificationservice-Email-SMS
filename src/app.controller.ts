@@ -25,6 +25,9 @@ export class IDetialsDTO {
   fileName: string;
 
   @ApiProperty()
+  companytEmail: string;
+
+  @ApiProperty()
   subject: string;
 
 
@@ -120,7 +123,7 @@ export class AppController {
       });
 
   }
-  @Post('paymenetplan')
+  @Post('paymentplan')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 3 },]))
   async sendPaymentPlan(@Body() details: IDetialsDTO, @UploadedFile() files, @Res() res: Response) {
     console.log(files);
