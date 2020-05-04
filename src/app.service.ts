@@ -10,6 +10,8 @@ import * as dotenv from 'dotenv';
 @Injectable()
 export class AppService {
 
+
+
   constructor(
     private readonly mailerService: MailerService
   ) { }
@@ -556,16 +558,5 @@ export class AppService {
       })
   }
 
-  // async multi(detail: IDetialsDTO): Promise<any> {
-  //   let files = detail.filePath.map(f => {
-  //     return {
-  //       filename: detail.fileName,
-  //       cid: '484948',
-  //       contentType: 'application/pdf',
-  //       path: f
 
-  //     }
-
-  //   })
-  // }
 }
